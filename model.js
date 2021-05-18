@@ -10,30 +10,53 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+
+
+renderer.domElement.style.width = "100%";
+renderer.domElement.style.height = "100%";
+
+const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+
 const controls = new OrbitControls( camera, renderer.domElement );
 
 loader.load( './scene.gltf', function ( gltf ) {
 
+    
+
+
     scene.add( gltf.scene );
     controls.update();
-    function animate() {
     
-        requestAnimationFrame( animate );
-        controls.autoRotate=true;
-        controls.maxDistance=15
-        controls.autoRotateSpeed = 2.0;
-        controls.enableDamping=true;
-        controls.update();
-        renderer.render( scene, camera );
-    }
-    animate()
+}, undefined, function (error) {
+    console.error( error )
+} );
+
+
+loader.load( './rat/scene.gltf', function ( gltf2 ) {
     
+    scene.add( gltf2.scene );
 }, undefined, function (error) {
     console.error( error )
 } );
 
 camera.position.set(0, 6 ,10);
 
+function animate() {
+    const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+
+    requestAnimationFrame( animate );
+    controls.autoRotate=true;
+    /* controls.maxDistance=15 */
+    controls.autoRotateSpeed = .5;
+    controls.enableDamping=true;
+    controls.update();
+    renderer.render( scene, camera );
+}
+animate()
 
 
 
